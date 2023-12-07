@@ -22,7 +22,7 @@ services:
     image: nginx:latest
     container_name: mynginx-019
     volumes:
-      - ./nginx:/etc/nginx/conf.d
+      - ./nginx/conf:/etc/nginx/conf.d
       - ./src/collected_static:/static
     ports:
       - 80:80
