@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  django:
+    build: ./django
+    command: uvicorn config.asgi:application --host 0.0.0.0 --port 8000
+    expose:
+      - 8000
+    volumes:
+      - ./src:/code
+    depends_on:
+      - db
+      - nginx
+  db:
+    image: postgres:15.4
+    volumes:
+      - postgres-data-019:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=iniad
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=testdb
+  nginx:
+    image: nginx:latest
+    container_name: mynginx-019
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./src/collected_static:/static
+    ports:
+      - 80:80
+    depends_on:
+      - django
+volumes:
+  postgres-data-019:
